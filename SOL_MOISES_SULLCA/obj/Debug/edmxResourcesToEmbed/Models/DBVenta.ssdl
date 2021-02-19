@@ -1,0 +1,102 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="BDVentaModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityType Name="cliente">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="dni" Type="varchar" MaxLength="8" Nullable="false" />
+    <Property Name="nombre" Type="varchar" MaxLength="50" Nullable="false" />
+    <Property Name="apellido_pat" Type="varchar" MaxLength="50" Nullable="false" />
+    <Property Name="apellido_mat" Type="varchar" MaxLength="50" Nullable="false" />
+    <Property Name="email" Type="varchar" MaxLength="100" />
+    <Property Name="telefono" Type="varchar" MaxLength="9" />
+  </EntityType>
+  <EntityType Name="orden">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="id_cliente" Type="int" Nullable="false" />
+    <Property Name="importe_total" Type="decimal" Precision="16" Scale="2" Nullable="false" />
+    <Property Name="fecha_ingreso" Type="datetime" Nullable="false" />
+    <Property Name="fecha_entrega" Type="datetime" Nullable="false" />
+  </EntityType>
+  <EntityType Name="orden_detalle">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="id_orden" Type="int" Nullable="false" />
+    <Property Name="id_producto" Type="varchar" MaxLength="10" Nullable="false" />
+    <Property Name="cantidad" Type="int" Nullable="false" />
+    <Property Name="precioUnitario" Type="decimal" Precision="16" Scale="2" Nullable="false" />
+    <Property Name="importe" Type="decimal" Precision="16" Scale="2" Nullable="false" />
+  </EntityType>
+  <EntityType Name="producto">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="varchar" MaxLength="10" Nullable="false" />
+    <Property Name="nombre" Type="varchar" MaxLength="50" Nullable="false" />
+    <Property Name="descripcion" Type="varchar" MaxLength="150" />
+    <Property Name="fecha_produccion" Type="datetime" Nullable="false" />
+    <Property Name="categoria" Type="varchar" MaxLength="50" Nullable="false" />
+    <Property Name="precio_compra" Type="decimal" Precision="16" Scale="2" Nullable="false" />
+    <Property Name="precio_venta" Type="decimal" Precision="16" Scale="2" Nullable="false" />
+  </EntityType>
+  <Association Name="FK_orden_cliente">
+    <End Role="cliente" Type="Self.cliente" Multiplicity="1" />
+    <End Role="orden" Type="Self.orden" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="cliente">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="orden">
+        <PropertyRef Name="id_cliente" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_orden_detalle_orden">
+    <End Role="orden" Type="Self.orden" Multiplicity="1" />
+    <End Role="orden_detalle" Type="Self.orden_detalle" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="orden">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="orden_detalle">
+        <PropertyRef Name="id_orden" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_orden_detalle_producto">
+    <End Role="producto" Type="Self.producto" Multiplicity="1" />
+    <End Role="orden_detalle" Type="Self.orden_detalle" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="producto">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="orden_detalle">
+        <PropertyRef Name="id_producto" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="BDVentaModelStoreContainer">
+    <EntitySet Name="cliente" EntityType="Self.cliente" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="orden" EntityType="Self.orden" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="orden_detalle" EntityType="Self.orden_detalle" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="producto" EntityType="Self.producto" Schema="dbo" store:Type="Tables" />
+    <AssociationSet Name="FK_orden_cliente" Association="Self.FK_orden_cliente">
+      <End Role="cliente" EntitySet="cliente" />
+      <End Role="orden" EntitySet="orden" />
+    </AssociationSet>
+    <AssociationSet Name="FK_orden_detalle_orden" Association="Self.FK_orden_detalle_orden">
+      <End Role="orden" EntitySet="orden" />
+      <End Role="orden_detalle" EntitySet="orden_detalle" />
+    </AssociationSet>
+    <AssociationSet Name="FK_orden_detalle_producto" Association="Self.FK_orden_detalle_producto">
+      <End Role="producto" EntitySet="producto" />
+      <End Role="orden_detalle" EntitySet="orden_detalle" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>

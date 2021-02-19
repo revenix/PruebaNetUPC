@@ -1,0 +1,46 @@
+﻿@model List<SOL_MOISES_SULLCA.Models.ViewModels.OrdenTableViewModel>
+@{
+    ViewBag.Title = "Ordenes de Compra";
+}
+
+<h2>Ordenes de Compra</h2>
+
+<div class="row">
+       <div class="col-lg-12">
+           <table class="table table-striped">
+               <thead>
+                   <tr>
+                       <th scope="col">Cliente</th>
+                       <th scope="col"> Producto</th>
+                       <th scope="col">Cantidad</th>
+                       <th scope="col">Importe Unitario</th>
+
+                       <th scope="col">Importe Total</th>
+                       <th scope="col">Fecha de Compra</th>
+                       <th scope="col">Fecha de Entrega</th>
+
+
+                   </tr>
+               </thead>
+               @foreach (var item in Model)
+               {
+                   <tbody>
+                       <tr>
+                           <td>@item.cliente</td>
+                           <td>@item.Producto</td>
+
+                           <td>@item.cantidad</td>
+                           <td>@item.importe_unitario</td>
+
+                           <td>@item.importe_total</td>
+                           <td>@item.fecha_ingreso</td>
+                           <td>@item.fecha_estimada</td>
+
+
+                       </tr>
+                       </tbody>
+                       }
+
+               </table>
+       </div>
+</div>

@@ -1,0 +1,295 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="BDVentaModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="cliente">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="dni" Type="varchar" MaxLength="8" Nullable="false" />
+          <Property Name="nombre" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="apellido_pat" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="apellido_mat" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="email" Type="varchar" MaxLength="100" />
+          <Property Name="telefono" Type="varchar" MaxLength="9" />
+        </EntityType>
+        <EntityType Name="orden">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="id_cliente" Type="int" Nullable="false" />
+          <Property Name="importe_total" Type="decimal" Precision="16" Scale="2" Nullable="false" />
+          <Property Name="fecha_ingreso" Type="datetime" Nullable="false" />
+          <Property Name="fecha_entrega" Type="datetime" Nullable="false" />
+        </EntityType>
+        <EntityType Name="orden_detalle">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="id_orden" Type="int" Nullable="false" />
+          <Property Name="id_producto" Type="varchar" MaxLength="10" Nullable="false" />
+          <Property Name="cantidad" Type="int" Nullable="false" />
+          <Property Name="precioUnitario" Type="decimal" Precision="16" Scale="2" Nullable="false" />
+          <Property Name="importe" Type="decimal" Precision="16" Scale="2" Nullable="false" />
+        </EntityType>
+        <EntityType Name="producto">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="varchar" MaxLength="10" Nullable="false" />
+          <Property Name="nombre" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="descripcion" Type="varchar" MaxLength="150" />
+          <Property Name="fecha_produccion" Type="datetime" Nullable="false" />
+          <Property Name="categoria" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="precio_compra" Type="decimal" Precision="16" Scale="2" Nullable="false" />
+          <Property Name="precio_venta" Type="decimal" Precision="16" Scale="2" Nullable="false" />
+        </EntityType>
+        <Association Name="FK_orden_cliente">
+          <End Role="cliente" Type="Self.cliente" Multiplicity="1" />
+          <End Role="orden" Type="Self.orden" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="cliente">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="orden">
+              <PropertyRef Name="id_cliente" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_orden_detalle_orden">
+          <End Role="orden" Type="Self.orden" Multiplicity="1" />
+          <End Role="orden_detalle" Type="Self.orden_detalle" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="orden">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="orden_detalle">
+              <PropertyRef Name="id_orden" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_orden_detalle_producto">
+          <End Role="producto" Type="Self.producto" Multiplicity="1" />
+          <End Role="orden_detalle" Type="Self.orden_detalle" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="producto">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="orden_detalle">
+              <PropertyRef Name="id_producto" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="BDVentaModelStoreContainer">
+          <EntitySet Name="cliente" EntityType="Self.cliente" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="orden" EntityType="Self.orden" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="orden_detalle" EntityType="Self.orden_detalle" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="producto" EntityType="Self.producto" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_orden_cliente" Association="Self.FK_orden_cliente">
+            <End Role="cliente" EntitySet="cliente" />
+            <End Role="orden" EntitySet="orden" />
+          </AssociationSet>
+          <AssociationSet Name="FK_orden_detalle_orden" Association="Self.FK_orden_detalle_orden">
+            <End Role="orden" EntitySet="orden" />
+            <End Role="orden_detalle" EntitySet="orden_detalle" />
+          </AssociationSet>
+          <AssociationSet Name="FK_orden_detalle_producto" Association="Self.FK_orden_detalle_producto">
+            <End Role="producto" EntitySet="producto" />
+            <End Role="orden_detalle" EntitySet="orden_detalle" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="BDVentaModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="cliente">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="dni" Type="String" MaxLength="8" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="nombre" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="apellido_pat" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="apellido_mat" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="email" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="telefono" Type="String" MaxLength="9" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="orden" Relationship="Self.FK_orden_cliente" FromRole="cliente" ToRole="orden" />
+        </EntityType>
+        <EntityType Name="orden">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="id_cliente" Type="Int32" Nullable="false" />
+          <Property Name="importe_total" Type="Decimal" Precision="16" Scale="2" Nullable="false" />
+          <Property Name="fecha_ingreso" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="fecha_entrega" Type="DateTime" Nullable="false" Precision="3" />
+          <NavigationProperty Name="cliente" Relationship="Self.FK_orden_cliente" FromRole="orden" ToRole="cliente" />
+          <NavigationProperty Name="orden_detalle" Relationship="Self.FK_orden_detalle_orden" FromRole="orden" ToRole="orden_detalle" />
+        </EntityType>
+        <EntityType Name="orden_detalle">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="id_orden" Type="Int32" Nullable="false" />
+          <Property Name="id_producto" Type="String" MaxLength="10" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="cantidad" Type="Int32" Nullable="false" />
+          <Property Name="precioUnitario" Type="Decimal" Precision="16" Scale="2" Nullable="false" />
+          <Property Name="importe" Type="Decimal" Precision="16" Scale="2" Nullable="false" />
+          <NavigationProperty Name="orden" Relationship="Self.FK_orden_detalle_orden" FromRole="orden_detalle" ToRole="orden" />
+          <NavigationProperty Name="producto" Relationship="Self.FK_orden_detalle_producto" FromRole="orden_detalle" ToRole="producto" />
+        </EntityType>
+        <EntityType Name="producto">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="String" MaxLength="10" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="nombre" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="descripcion" Type="String" MaxLength="150" FixedLength="false" Unicode="false" />
+          <Property Name="fecha_produccion" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="categoria" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="precio_compra" Type="Decimal" Precision="16" Scale="2" Nullable="false" />
+          <Property Name="precio_venta" Type="Decimal" Precision="16" Scale="2" Nullable="false" />
+          <NavigationProperty Name="orden_detalle" Relationship="Self.FK_orden_detalle_producto" FromRole="producto" ToRole="orden_detalle" />
+        </EntityType>
+        <Association Name="FK_orden_cliente">
+          <End Role="cliente" Type="Self.cliente" Multiplicity="1" />
+          <End Role="orden" Type="Self.orden" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="cliente">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="orden">
+              <PropertyRef Name="id_cliente" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_orden_detalle_orden">
+          <End Role="orden" Type="Self.orden" Multiplicity="1" />
+          <End Role="orden_detalle" Type="Self.orden_detalle" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="orden">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="orden_detalle">
+              <PropertyRef Name="id_orden" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_orden_detalle_producto">
+          <End Role="producto" Type="Self.producto" Multiplicity="1" />
+          <End Role="orden_detalle" Type="Self.orden_detalle" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="producto">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="orden_detalle">
+              <PropertyRef Name="id_producto" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="BDVentaEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="cliente" EntityType="Self.cliente" />
+          <EntitySet Name="orden" EntityType="Self.orden" />
+          <EntitySet Name="orden_detalle" EntityType="Self.orden_detalle" />
+          <EntitySet Name="producto" EntityType="Self.producto" />
+          <AssociationSet Name="FK_orden_cliente" Association="Self.FK_orden_cliente">
+            <End Role="cliente" EntitySet="cliente" />
+            <End Role="orden" EntitySet="orden" />
+          </AssociationSet>
+          <AssociationSet Name="FK_orden_detalle_orden" Association="Self.FK_orden_detalle_orden">
+            <End Role="orden" EntitySet="orden" />
+            <End Role="orden_detalle" EntitySet="orden_detalle" />
+          </AssociationSet>
+          <AssociationSet Name="FK_orden_detalle_producto" Association="Self.FK_orden_detalle_producto">
+            <End Role="producto" EntitySet="producto" />
+            <End Role="orden_detalle" EntitySet="orden_detalle" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="BDVentaModelStoreContainer" CdmEntityContainer="BDVentaEntities">
+          <EntitySetMapping Name="cliente">
+            <EntityTypeMapping TypeName="BDVentaModel.cliente">
+              <MappingFragment StoreEntitySet="cliente">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="dni" ColumnName="dni" />
+                <ScalarProperty Name="nombre" ColumnName="nombre" />
+                <ScalarProperty Name="apellido_pat" ColumnName="apellido_pat" />
+                <ScalarProperty Name="apellido_mat" ColumnName="apellido_mat" />
+                <ScalarProperty Name="email" ColumnName="email" />
+                <ScalarProperty Name="telefono" ColumnName="telefono" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="orden">
+            <EntityTypeMapping TypeName="BDVentaModel.orden">
+              <MappingFragment StoreEntitySet="orden">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="id_cliente" ColumnName="id_cliente" />
+                <ScalarProperty Name="importe_total" ColumnName="importe_total" />
+                <ScalarProperty Name="fecha_ingreso" ColumnName="fecha_ingreso" />
+                <ScalarProperty Name="fecha_entrega" ColumnName="fecha_entrega" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="orden_detalle">
+            <EntityTypeMapping TypeName="BDVentaModel.orden_detalle">
+              <MappingFragment StoreEntitySet="orden_detalle">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="id_orden" ColumnName="id_orden" />
+                <ScalarProperty Name="id_producto" ColumnName="id_producto" />
+                <ScalarProperty Name="cantidad" ColumnName="cantidad" />
+                <ScalarProperty Name="precioUnitario" ColumnName="precioUnitario" />
+                <ScalarProperty Name="importe" ColumnName="importe" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="producto">
+            <EntityTypeMapping TypeName="BDVentaModel.producto">
+              <MappingFragment StoreEntitySet="producto">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="nombre" ColumnName="nombre" />
+                <ScalarProperty Name="descripcion" ColumnName="descripcion" />
+                <ScalarProperty Name="fecha_produccion" ColumnName="fecha_produccion" />
+                <ScalarProperty Name="categoria" ColumnName="categoria" />
+                <ScalarProperty Name="precio_compra" ColumnName="precio_compra" />
+                <ScalarProperty Name="precio_venta" ColumnName="precio_venta" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
